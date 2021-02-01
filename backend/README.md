@@ -1,6 +1,6 @@
 # Backend
 
-This service will listen to incoming POST requests. If they include a JSON body with `body` and `content-type` keys of type `Buffer` and `String` respectively, it will store the object in a MongoDB collection.
+This service will listen to incoming POST requests to `/upload`. If they include a multipart/form-data body with `image`, `name`, `mimetype` and `size` keys (of type `Buffer`, `String`, `String` and `Number` respectively), it will store the object in a MongoDB collection.
 
 ## How to run this service
 
