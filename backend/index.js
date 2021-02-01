@@ -19,8 +19,10 @@ const imageSchema = new Schema({
 // Initialize object Model
 const Image = mongoose.model('Image', imageSchema);
 
-// Handle POST requests
+// Handle POST requests with Multer middleware
 app.post('/upload', upload.single('image'), (req, res) => {
+    // req.file contains all the image's data,
+    // in this case, the form input field needs to have 'image' as the value of the 'name' attribute
     const imgToUpload = new Image({
         image: req.file.buffer,
         name: req.file.originalname,
