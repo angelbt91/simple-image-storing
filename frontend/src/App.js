@@ -1,46 +1,35 @@
-import React, {Component} from 'react';
-import axios from 'axios';
+import React, {useState} from 'react';
 
-class App extends Component {
+const App = () => {
+    const [image, setImage] = useState(null);
 
-    state = {
-        image: null
+    const handleImageChange = (e) => {
+        setImage(e.target.files[0]);
     };
 
-    handleImageChange = (e) => {
-        this.setState({
-            image: e.target.files[0]
-        })
-    };
-
-    handleSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(this.state);
         let form_data = new FormData();
-        form_data.append('image', this.state.image, this.state.image.name);
-        let url = 'http://localhost:3001/upload';
-        axios.post(url, form_data, {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
+        form_data.append('image', image, image.name);
+
+
+        fetch('http://localhost:3001/upload', {
+            method: 'POST',
+            body: form_data
         })
             .then(res => console.log(res.data))
-            .catch(err => console.log(err))
-    };
-
-    render() {
-        return (
-            <div className="App">
-                <form onSubmit={this.handleSubmit} encType="multipart/form-data" method="POST">
-                    <p>
-                        <input type="file" id="image" name="image" accept="image/png, image/jpeg"
-                               onChange={this.handleImageChange} required/>
-                    </p>
-                    <input type="submit"/>
-                </form>
-            </div>
-        );
+            .catch(err => console.error(err));
     }
+
+    return (
+        <div className="App">
+            <form onSubmit={handleSubmit} encType="multipart/form-data" method="POST">
+                <input type="file" id="image" name="image" accept="image/png, image/jpeg"
+                       onChange={handleImageChange} required/>
+                <input type="submit"/>
+            </form>
+        </div>
+    )
 }
 
 export default App;
