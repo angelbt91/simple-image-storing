@@ -12,7 +12,6 @@ const App = () => {
         let form_data = new FormData();
         form_data.append('image', image, image.name);
 
-
         fetch('http://localhost:3001/upload', {
             method: 'POST',
             body: form_data
@@ -26,11 +25,10 @@ const App = () => {
             <form onSubmit={handleSubmit} encType="multipart/form-data" method="POST">
                 <input type="file" id="image" name="image" accept="image/png, image/jpeg"
                        onChange={handleImageChange} required/>
-                <input type="submit"/>
+                <input type="submit" value="Upload picture"/>
             </form>
         </div>
     )
 }
 
 export default App;
-
