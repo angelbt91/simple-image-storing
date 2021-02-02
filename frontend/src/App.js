@@ -1,32 +1,34 @@
-import React, {useState} from 'react';
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {Container, Row, Col} from 'react-bootstrap';
+import SubmitForm from "./SubmitForm";
+import ImagesGrid from "./ImagesGrid";
 
 const App = () => {
-    const [image, setImage] = useState(null);
-
-    const handleImageChange = (e) => {
-        setImage(e.target.files[0]);
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        let form_data = new FormData();
-        form_data.append('image', image, image.name);
-
-        fetch('http://localhost:3001/upload', {
-            method: 'POST',
-            body: form_data
-        })
-            .then(res => console.log(res.data))
-            .catch(err => console.error(err));
-    }
-
     return (
         <div className="App">
-            <form onSubmit={handleSubmit} encType="multipart/form-data" method="POST">
-                <input type="file" id="image" name="image" accept="image/png, image/jpeg"
-                       onChange={handleImageChange} required/>
-                <input type="submit" value="Upload picture"/>
-            </form>
+            <Container>
+                <Row className="p-3">
+                    <Col>
+                        <h1>Simple image storing:</h1>
+                    </Col>
+                </Row>
+                <Row className="p-3">
+                    <Col>
+                        <SubmitForm/>
+                    </Col>
+                </Row>
+                <Row className="p-3">
+                    <Col>
+                        <h1>Images stored:</h1>
+                    </Col>
+                </Row>
+                <Row className="p-3">
+                    <Col>
+                        <ImagesGrid/>
+                    </Col>
+                </Row>
+            </Container>
         </div>
     )
 }
