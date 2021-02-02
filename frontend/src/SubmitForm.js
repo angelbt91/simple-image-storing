@@ -17,7 +17,14 @@ const SubmitForm = () => {
             method: 'POST',
             body: form_data
         })
-            .then(res => console.log(res.data))
+            .then(res => {
+                if (res.ok) {
+                    // reloads the page after a successful upload - not fancy, but gets the job done
+                    document.location.reload();
+                } else {
+                    throw Error(res.statusText);
+                }
+            })
             .catch(err => console.error(err));
     }
 
