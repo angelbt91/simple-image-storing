@@ -8,4 +8,4 @@ Just run:
 
 `> yarn start`
 
-In order to work properly, the app expects the backend to be listening on `localhost:3001/upload`. Check the `/backend` folder to get instructions on how to start the backend service.
+In order to work properly, the app expects the backend to be listening on `localhost:3001`. Check `/backend/README.md` folder to get instructions on how to start the backend service.
