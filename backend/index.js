@@ -1,11 +1,12 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const multer = require('multer');
-const app = express();
-const upload = multer();
-const port = 3001;
-const Schema = mongoose.Schema;
-const cors = require('cors');
+const express = require('express'),
+    mongoose = require('mongoose'),
+    multer = require('multer'),
+    app = express(),
+    upload = multer(),
+    port = 3001,
+    Schema = mongoose.Schema,
+    cors = require('cors');
+
 app.use(cors());
 
 const imageSchema = new Schema({
@@ -18,17 +19,22 @@ const imageSchema = new Schema({
 const Image = mongoose.model('Image', imageSchema);
 
 // Handle POST requests with Multer middleware to upload images coming as multipart/form-data
-app.post('/image', upload.single('image'), (req, res) => {
-    // req.file contains all the image's data,
-    // in this case, the form input field needs to have 'image' as the value of the 'name' attribute
-    const imgToUpload = new Image({
-        image: req.file.buffer,
-        name: req.file.originalname,
-        size: req.file.size,
-        mimeType: req.file.mimetype
-    });
+app.post('/images', upload.array('images'), (req, res) => {
+    // req.files contains all the images' data
+    // In this case, the form input field needs to have 'images' as the value of the 'name' attribute
 
-    imgToUpload.save(function (err, result) {
+    // Iterate over every image received to create an array of Image objects
+    const imagesToUpload = req.files.map(image => {
+        return new Image({
+            image: image.buffer,
+            name: image.originalname,
+            size: image.size,
+            mimeType: image.mimetype
+        });
+    })
+
+    // Save all the Images in the array with insertMany()
+    Image.insertMany(imagesToUpload, (err, result) => {
         if (err) {
             res.status(400).send(err);
         } else {

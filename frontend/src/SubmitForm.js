@@ -2,18 +2,23 @@ import React, {useState} from 'react';
 
 const SubmitForm = () => {
 
-    const [image, setImage] = useState(null);
+    const [images, setImages] = useState(null);
 
     const handleImageChange = (e) => {
-        setImage(e.target.files[0]);
+        setImages(e.target.files);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        let form_data = new FormData(); // https://developer.mozilla.org/es/docs/Web/API/XMLHttpRequest/FormData
-        form_data.append('image', image, image.name);
 
-        fetch('http://localhost:3001/image', {
+        let form_data = new FormData(); // https://developer.mozilla.org/es/docs/Web/API/XMLHttpRequest/FormData
+        // Use Array.from() to convert the images var into an Array,
+        // as files coming from the input type=file element are a FileList object
+        Array.from(images).forEach(image => {
+            form_data.append('images', image, image.name);
+        })
+
+        fetch('http://localhost:3001/images', {
             method: 'POST',
             body: form_data
         })
@@ -30,9 +35,9 @@ const SubmitForm = () => {
 
     return (
         <form onSubmit={handleSubmit} encType="multipart/form-data" method="POST">
-            {/* 'encType' attribute is important to set when using Multer on the backend */}
-            <input type="file" id="image" name="image" accept="image/png, image/jpeg"
-                   onChange={handleImageChange} required/>
+            {/* 'encType' attribute must be set when using Multer on the backend */}
+            <input type="file" id="images" name="images" accept="image/png, image/jpeg"
+                   onChange={handleImageChange} required multiple/>
             <input type="submit" value="Upload picture"/>
         </form>
     )
